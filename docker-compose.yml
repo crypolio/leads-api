@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  leadeasygen-net:
+    external: true
+
+services:
+  leadeasygen-backend:
+    user: node
+    restart: always
+    hostname: leadeasygen-backend
+    container_name: leadeasygen-backend
+    build:
+      context: .
+    volumes:
+      - ./:/home/node:cached
+    # extra_hosts:
+    networks:
+      - leadeasygen-net
+    env_file: 
+      - .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - NODE_PORT=${NODE_PORT}
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
