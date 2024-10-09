@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: markets-configmap
+  namespace: crypolio-nodeserv
+data:
+  # App
+  app_version: "2.0.0"
+  app_name: "Crypolio"
+  app_service: "markets"
+  app_host: "api.crypolio.com/v2/markets"
+  app_client_host: "crypolio.com"
+  app_shutdown: "5"
+  # Api
+  api_base_url: "http://www.api.crypolio.com/"
+  # Node
+  node_port: "4002"
+  node_env: "production"
+  # Postgres
+  database_port: "5432"
+  database_host: "10.5.0.3"
+  database_name: "crypolio_markets"
+  # Kafka
+  kafka_host: "10.5.0.4:9092,10.5.0.4:9093,10.5.0.4:9094"

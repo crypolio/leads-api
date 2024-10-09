@@ -1,28 +1,50 @@
-version: '3'
+version: '3.7'
 
 networks:
-  leadeasygen-net:
+  crypolio-net:
     external: true
 
 services:
-  leadeasygen-backend:
+  ms-markets:
     user: node
     restart: always
-    hostname: leadeasygen-backend
-    container_name: leadeasygen-backend
+    hostname: ms-markets
+    container_name: ms-markets
     build:
       context: .
     volumes:
       - ./:/home/node:cached
     # extra_hosts:
     networks:
-      - leadeasygen-net
-    env_file: 
+      - crypolio-net
+    env_file:
       - .env
     environment:
-      - NODE_ENV=${NODE_ENV}
+      - APP_VERSION=${APP_VERSION}
+      - APP_NAME=${APP_NAME}
+      - APP_SERVICE=${APP_SERVICE}
+      - APP_HOST=${APP_HOST}
+      - APP_CLIENT_HOST=${APP_CLIENT_HOST}
+      - APP_SHUTDOWN=${APP_SHUTDOWN}
+ 
+      - JWT_ALGO=${JWT_ALGO}
+      - JWT_EXPIRY=${JWT_EXPIRY}
+      - JWT_SECRET=${JWT_SECRET}
+ 
       - NODE_PORT=${NODE_PORT}
+      - NODE_ENV=${NODE_ENV}
+
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+      - KAFKA_HOST=${KAFKA_HOST}
+
     ports:
-      - 3000:3000
+      - 4002:4002
+      - 7002:7002
     expose:
-      - 3000
+      - 4002
+      - 7002
