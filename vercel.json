@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/lib"
+      "destination": "/api"
     }
   ]
 }
