@@ -1,50 +1,71 @@
-/*
- * Start HTTP server.
- * @params config - Server configuration.
- * @params object - utils - Utilities functions.
- * @params array - Server configuration.
- */
-export const startServer = ({ config, utils, enabledServices }: any) => {
-	const app = new utils.Koa();
+// @ts-nocheck
+const startServer = ({
+  config,
+  utils,
+  constants,
+  middlewares,
+  enabledServices
+}) => {
+  const app = new utils.Koa();
+  const router = new utils.Router();
 
-	const isProduction = config.app.env != "production";
+  const isDevelopment = config.app.env.includes("development");
 
-	// Set app env.
-	switch (isProduction) {
-		case false:
-			require("./utils/logger")(app);
-		break;
-		case true:
-			break;
-	}
+  // Define CORS options
+  const corsOptions = {
+    origin: (ctx: Koa.Context) => {
+      const origin = ctx.request.header.origin;
+      if (constants.WHITELISTED_DOMAINS.includes(origin as string)) {
+        return origin;
+      }
+      return constants.REDIRECT_URL;
+    },
+    credentials: true
+  };
 
-	// Securing.
-	app.use(utils.helmet());
+  // // Middleware setup
+  // if (isDevelopment) {
+  // 	app.use(utils.morgan("dev"));
+  // }
 
-	// Enable CORS.
-	app.use(utils.cors());
+  app.use(utils.helmet());
 
-	// Compress response.
-	// app.use(utils.compression());
+  app.use(utils.cors(corsOptions));
 
-	// Support parsing of application/json type post data.
-	app.use(utils.bodyParser());
+  app.use(utils.bodyParser({ jsonLimit: "1mb", formLimit: "1mb" }));
 
-	app.listen(config.app.port);
+  // Root route
+  router.get("/", async ctx => {
+    const userAgent = ctx.headers["user-agent"];
+    if (!userAgent || isDevelopment) {
+      ctx.body = "LeadEasyGen API";
+    } else {
+      ctx.redirect(constants.REDIRECT_URL);
+    }
+  });
 
-	// Set REST api endpoint(s).
-	if (enabledServices && enabledServices.length) {
-		enabledServices.map((service: any) => {
-			app.use(service);
-		});
-	}
+  // Set REST api endpoint(s).
+  if (enabledServices && enabledServices.length) {
+    enabledServices.forEach((service: any) => {
+      app.use(service);
+    });
+  }
 
-	// Console log credit and server message.
-	utils.credit();
-	utils.startServerMsg(config);
+  // Error handling
+  app.use(middlewares.notFound);
+
+  if (isDevelopment) {
+    app.use(middlewares.developmentErrorHandler);
+  } else {
+    app.use(middlewares.productionErrorHandler);
+  }
+
+  utils.credit();
+  utils.startServerMsg(config);
+
+  app.listen(config.app.port);
+
+  return app.callback();
 };
 
-// Export app root index.
 export default startServer;
-
-// Copyright (c) 2012-2021 Choleski Louis - <choleski@gmx.com>

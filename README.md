@@ -1,6 +1,6 @@
-# LeadEasyGen API
+# Tigado API
 
-This is the API template for LeadEasyGen's CRM, built with Express and TypeScript.
+This is the API template for Tigado's CRM, built with Express and TypeScript.
 
 ## How to Use This Template
 
@@ -44,9 +44,9 @@ npm run lint
 
 ---
 
-# LeadEasyGen Express API
+# Tigado Express API
 
-This is the API template for LeadEasyGen's CRM, built with Express and TypeScript.
+This is the API template for Tigado's CRM, built with Express and TypeScript.
 
 ## How to Use This Template
 

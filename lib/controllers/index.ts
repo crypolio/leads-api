@@ -1,6 +1,8 @@
-import leadsController from "./v2/leadsController";
-import tasksController from "./v2/tasksController";
-import processController from "./v2/processController";
+"use strict";
+
+import leadsController from "./leadsController";
+import tasksController from "./tasksController";
+import processController from "./processController";
 
 const controllers: { [key: string]: any } = {};
 
@@ -9,4 +11,3 @@ controllers["tasks"] = tasksController;
 controllers["process"] = processController;
 
 export default controllers;
-

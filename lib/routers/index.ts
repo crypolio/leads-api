@@ -1,8 +1,8 @@
 "use strict";
 
-import leadsRouter from "./v2/leadsRouter";
-import tasksRouter from "./v2/tasksRouter";
-import processRouter from "./v2/processRouter";
+import leadsRouter from "./leadsRouter";
+import tasksRouter from "./tasksRouter";
+import processRouter from "./processRouter";
 
 const routers: { [key: string]: any } = {};
 

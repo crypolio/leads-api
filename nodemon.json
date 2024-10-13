@@ -1,6 +1,6 @@
 {
-	"watch": ["lib"],
-	"ext": ".ts,.js",
-	"ignore": [],
-	"exec": "npm start"
+  "watch": ["lib"],
+  "ext": ".ts,.js",
+  "ignore": [],
+  "exec": "vercel dev"
 }
