@@ -46,8 +46,8 @@ const startServer = ({
 
   // Set REST api endpoint(s).
   if (enabledServices && enabledServices.length) {
-    enabledServices.forEach((service: any) => {
-      app.use(service);
+    enabledServices.forEach((serviceRouter: any) => {
+      app.use(serviceRouter.routes()).use(serviceRouter.allowedMethods());
     });
   }
 

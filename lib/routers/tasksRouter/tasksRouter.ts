@@ -3,7 +3,8 @@ const tasksRouter = ({ router, middlewares, controller }: any) => {
   router.post("/create", controller.create);
   router.get("/healthcheck", controller.getHealth);
 
-  return router.routes();
+  return router;
+  // return router.routes();
 };
 
 export default tasksRouter;
