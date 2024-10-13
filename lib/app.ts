@@ -51,6 +51,8 @@ const startServer = ({
     });
   }
 
+  app.use(router.routes()).use(router.allowedMethods());
+
   // Error handling
   app.use(middlewares.notFound);
 
