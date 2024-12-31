@@ -38,7 +38,7 @@ const startServer = ({
   router.get("/", async ctx => {
     const userAgent = ctx.headers["user-agent"];
     if (!userAgent || isDevelopment) {
-      ctx.body = "LeadEasyGen API";
+      ctx.body = "ShipHub API";
     } else {
       ctx.redirect(constants.REDIRECT_URL);
     }
@@ -56,11 +56,7 @@ const startServer = ({
   // Error handling
   app.use(middlewares.notFound);
 
-  if (isDevelopment) {
-    app.use(middlewares.developmentErrorHandler);
-  } else {
-    app.use(middlewares.productionErrorHandler);
-  }
+  app.use(middlewares.catchErrors);
 
   utils.credit();
   utils.startServerMsg(config);

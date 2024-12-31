@@ -8,6 +8,8 @@ import { chromium } from "playwright";
 import { exec } from "child_process";
 import Router from "koa-router";
 import helmet from "koa-helmet";
+import jwt from 'jsonwebtoken';
+import bcrypt from "bcryptjs";
 import cors from "@koa/cors";
 import moment from "moment";
 import axios from "axios";
@@ -19,6 +21,17 @@ import os from "os";
 // Internal libraries dependencies.
 import config from "./../config";
 import PostgresUtil from "./classes/PostgresUtil";
+
+// Set private/public keys.
+const privateKey = fs.readFileSync(
+  path.join(__dirname, '/../../private/keys/shiphub.key'),
+  'utf8',
+);
+
+const publicKey = fs.readFileSync(
+  path.join(__dirname, '/../../private/keys/shiphub.key.pub'),
+  'utf8',
+);
 
 const pg = new PostgresUtil();
 
@@ -70,6 +83,46 @@ const getHealth = () => {
 index["getHealth"] = getHealth;
 
 /*
+ * Sign JWT.
+ * @param {object} payload - Data payload.
+ * @returns {object} Returns JWT string.
+ */
+const signJWT = (payload: any) => {
+  const app: any = config.app;
+  const options: any = {
+    issuer: app.name,
+    subject: `info@${app.clientHost}`,
+    audience: `https://www.${app.clientHost}`,
+    expiresIn: app.jwt.expiry,
+    algorithm: app.jwt.algo,
+  };
+  return jwt.sign(payload, privateKey, options);
+};
+index['signJWT'] = signJWT;
+
+/*
+ * Verify JWT.
+ * @param {string} token - JWT sting.
+ * @returns {boolean} Returns status.
+ */
+const verifyJWT = (token: string) => {
+  try {
+    const app: any = config.app;
+    const options = {
+      issuer: app.name,
+      subject: `info@${app.clientHost}`,
+      audience: `https://www.${app.clientHost}`,
+      expiresIn: app.jwt.expiry,
+      algorithm: app.jwt.algo,
+    };
+    return jwt.verify(token, publicKey, options);
+  } catch (err) {
+    return false;
+  }
+};
+index['verifyJWT'] = verifyJWT;
+
+/*
  * Timeout.
  */
 const timeout = (ms: number) => {
@@ -105,11 +158,11 @@ const getPrivateIp = (type = "ipv4", device = false, alias = false) => {
       res.push(
         a >= 1
           ? // this single interface has multiple ipv4/ipv6 addresses.
-            `${device ? `${ifname} :` : ""}` +
-              `${alias ? a : ""}` +
-              `${iface.address}`
+          `${device ? `${ifname} :` : ""}` +
+          `${alias ? a : ""}` +
+          `${iface.address}`
           : // this interface has only one ipv4/ipv6 adress.
-            `${device ? `${ifname} :` : ""}` + `${iface.address}`
+          `${device ? `${ifname} :` : ""}` + `${iface.address}`
       );
       ++a;
     });
@@ -268,9 +321,9 @@ const startServerMsg = (configuration: any) => {
   const [ip]: any[] = getPrivateIp("ipv4");
   console.log(
     ` Started ${name} ${service} microservice ${uuidv4()} in ` +
-      `${(env || "").includes("dev") ? "development" : "production"} mode on ` +
-      `${ip ? ip : "localhost"} port ${port}; Core v.${version} ` +
-      `Press Ctrl-C to terminate apps.\n`
+    `${(env || "").includes("dev") ? "development" : "production"} mode on ` +
+    `${ip ? ip : "localhost"} port ${port}; Core v.${version} ` +
+    `Press Ctrl-C to terminate apps.\n`
   );
 };
 index["startServerMsg"] = startServerMsg;
@@ -282,12 +335,12 @@ const credit = () => {
   console.log(
     "\x1b[36m%s\x1b[0m",
     "\n" +
-      ` ██╗     ███████╗ █████╗ ██████╗ ███████╗ █████╗ ███████╗██╗   ██╗ ██████╗ ███████╗███╗   ██╗ \n` +
-      ` ██║     ██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝ ██╔════╝████╗  ██║ \n` +
-      ` ██║     █████╗  ███████║██║  ██║█████╗  ███████║███████╗ ╚████╔╝ ██║  ███╗█████╗  ██╔██╗ ██║ \n` +
-      ` ██║     ██╔══╝  ██╔══██║██║  ██║██╔══╝  ██╔══██║╚════██║  ╚██╔╝  ██║   ██║██╔══╝  ██║╚██╗██║ \n` +
-      ` ███████╗███████╗██║  ██║██████╔╝███████╗██║  ██║███████║   ██║   ╚██████╔╝███████╗██║ ╚████║ \n` +
-      ` ╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚══════╝╚═╝  ╚═══╝ `
+    " ██╗    ██╗███████╗███████╗██╗   ██╗ ██████╗  \n" +
+    " ██║    ██║██╔════╝╚══███╔╝██║   ██║██╔════╝  \n" +
+    " ██║ █╗ ██║█████╗    ███╔╝ ██║   ██║██║  ███╗ \n" +
+    " ██║███╗██║██╔══╝   ███╔╝  ██║   ██║██║   ██║ \n" +
+    " ╚███╔███╔╝███████╗███████╗╚██████╔╝╚██████╔╝ \n" +
+    "  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝  ╚═════╝  "
   );
 };
 index["credit"] = credit;
@@ -327,6 +380,7 @@ index["chromium"] = chromium;
 index["helmet"] = helmet;
 index["moment"] = moment;
 index["Router"] = Router;
+index["bcrypt"] = bcrypt;
 index["axios"] = axios;
 index["path"] = path;
 index["cors"] = cors;

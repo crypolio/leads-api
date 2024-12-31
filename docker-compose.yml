@@ -1,22 +1,22 @@
 version: '3.7'
 
 networks:
-  leadeadygen-net:
+  shiphub-net:
     external: true
 
 services:
-  ms-markets:
+  ms-members:
     user: node
     restart: always
-    hostname: ms-markets
-    container_name: ms-markets
+    hostname: ms-members
+    container_name: ms-members
     build:
       context: .
     volumes:
       - ./:/home/node:cached
     # extra_hosts:
     networks:
-      - leadeadygen-net
+      - shiphub-net
     env_file:
       - .env
     environment:
@@ -27,6 +27,10 @@ services:
       - APP_CLIENT_HOST=${APP_CLIENT_HOST}
       - APP_SHUTDOWN=${APP_SHUTDOWN}
  
+      - JWT_ALGO=${JWT_ALGO}
+      - JWT_EXPIRY=${JWT_EXPIRY}
+      - JWT_SECRET=${JWT_SECRET}
+
       - NODE_PORT=${NODE_PORT}
       - NODE_ENV=${NODE_ENV}
 
@@ -42,3 +46,4 @@ services:
     expose:
       - 3000
       - 7000
+

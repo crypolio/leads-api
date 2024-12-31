@@ -26,3 +26,4 @@ EXPOSE 3000
 
 # Use the command based on NODE_ENV
 CMD sh -c 'yarn start$([ "$NODE_ENV" = "dev" ] && echo ":dev")'
+

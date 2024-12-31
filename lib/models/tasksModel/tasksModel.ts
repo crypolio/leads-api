@@ -1,40 +1,75 @@
-const tasksModel = ({ api, utils, config, constants, models }: any) => {
-  const { log, query, getHealth, uuidv4, getEpochDatetime } = utils;
+// @ts-nocheck
 
-  /*
-   * List all supported tasks.
-   * @returns {array} Returns tasks.
-   */
-  const list = async () => {
-    try {
-      const res = await query(
-        `SELECT * FROM tasks AS t0 ORDER BY t0.date_created DESC`
-      );
+'use strict';
 
-      return res;
-    } catch (e) {
-      throw new Error("while listing tasks.");
-    }
-  };
+// import { log } from './../../utils';
 
-  /*
-   * Create task.
-   * @returns {boolean} Returns procedure status.
-   */
-  const create = async (www: string = "") => {
-    const result = await utils.query(
-      "INSERT INTO tasks (id, www, status, date_created) VALUES ($1, $2, $3, $4)",
-      [uuidv4(), www, 0, getEpochDatetime()]
-    );
+// Set setting & processes utilities.
+// let SU = new SettingsUtil; 
 
-    return result;
-  };
+const tasks = ({}) => {
 
-  return Object.freeze({
-    list,
-    create,
-    getHealth
-  });
+	// constructor(options){
+
+	// 	this.options = Object.assign({}, {
+	// 		emailInterval : Number(options.emailInterval) || SU.getEmailProcessInterval();
+	// 	}, options);
+
+	// 	this.isInit;
+	// 	this.processes = {};
+
+	// };
+
+	/*
+	* Initialize processes.
+	*/
+	const init = async () => {
+		// try{
+			if(typeof(this.isInit) === 'undefined'){
+				// Exec mail process.
+				this.execMailProcess();
+				this.processes.mail   = setInterval(this.execMailProcess, this.options.emailInterval);
+				
+			}
+		// }catch(e){
+		// 	throw new Error('while initializing processes.');
+		// }
+	};
+
+	/*
+	* Stop exec processes.
+	* @params {String} name - Process name.
+	*/
+	const stop = async (name = undefined) => {
+		// try{
+			if(typeof(this.isInit) === 'undefined'){
+				if(typeof(name) !== 'undefined'){
+					clearInterval(this?.processes[name]);
+				}else{
+					Object.keys(this?.processes).map((pName) => (
+						clearInterval(this?.processes[pName])
+					));
+				}
+				return 0;
+			}
+		// }catch(e){
+		// 	throw new Error('while stoping processes.');
+		// }
+	};
+	
+	/*
+	* Execute mail process.
+	*/
+	const execMailProcess = async () => {
+		// try{
+			// log.info('Executing mail process...', this?.options);
+			// // await new (require('./Mailing'))({}).mailEmails();
+			// return true;
+		// }catch(e){
+		// 	throw new Error('while executing mail process.');
+		// }
+	};
+
 };
 
-export default tasksModel;
+export default tasks;

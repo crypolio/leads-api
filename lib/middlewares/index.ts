@@ -1,18 +1,15 @@
 import notFound from "./notFound";
 import catchErrors from "./catchErrors";
-import productionErrorHandler from "./productionErrorHandler";
-import developmentErrorHandler from "./developmentErrorHandler";
+import authenticate from "./authenticate";
 
 export {
-  notFound,
-  catchErrors,
-  productionErrorHandler,
-  developmentErrorHandler
+	notFound,
+	catchErrors,
+	authenticate,
 };
 
 export default {
-  notFound,
-  catchErrors,
-  productionErrorHandler,
-  developmentErrorHandler
+	notFound,
+	catchErrors,
+	authenticate,
 };

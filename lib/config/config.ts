@@ -15,7 +15,12 @@ const config = {
     host: process.env.APP_HOST,
     clientHost: process.env.APP_CLIENT_HOST,
     shutdown: process.env.APP_SHUTDOWN,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    jwt: {
+      algo: process.env.JWT_ALGO,
+      expiry: process.env.JWT_EXPIRY,
+      secret: process.env.JWT_SECRET,
+    },
   },
   api: {
     base_url: process.env.API_BASE_URL

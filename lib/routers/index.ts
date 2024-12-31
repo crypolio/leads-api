@@ -1,13 +1,11 @@
 "use strict";
 
-import leadsRouter from "./leadsRouter";
-import tasksRouter from "./tasksRouter";
-import processRouter from "./processRouter";
+import geoipRouter from "./geoipRouter";
+import usersRouter from "./usersRouter";
 
 const routers: { [key: string]: any } = {};
 
-routers["leads"] = leadsRouter;
-routers["tasks"] = tasksRouter;
-routers["process"] = processRouter;
+routers["geoip"] = geoipRouter;
+routers["users"] = usersRouter;
 
 export default routers;

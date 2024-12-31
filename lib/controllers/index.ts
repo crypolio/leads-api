@@ -1,13 +1,11 @@
 "use strict";
 
-import leadsController from "./leadsController";
-import tasksController from "./tasksController";
-import processController from "./processController";
+import geoipController from "./geoipController";
+import usersController from "./usersController";
 
 const controllers: { [key: string]: any } = {};
 
-controllers["leads"] = leadsController;
-controllers["tasks"] = tasksController;
-controllers["process"] = processController;
+controllers["geoip"] = geoipController;
+controllers["users"] = usersController;
 
 export default controllers;
