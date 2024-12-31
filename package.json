@@ -1,20 +1,20 @@
 {
-  "name": "tigado-backend",
+  "name": "shiphub-backend",
   "version": "2.0.0",
-  "description": "Tigado Inc. api microservice.",
-  "author": "Tigado Inc. <tigado.dev@gmail.com> (https://www.tigado.ca)",
+  "description": "ShipHub Inc. api microservice.",
+  "author": "ShipHub Inc. <noreply@shiphub.com> (https://www.shiphub.com)",
   "main": "dist/index.js",
   "private": true,
   "license": "MIT",
   "keywords": [
-    "Tigado",
+    "ShipHub",
     "CRM",
     "ERP",
     "Backend"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tigado/tigado-api.git"
+    "url": "git+https://github.com/shiphub/shiphub-api.git"
   },
   "scripts": {
     "build": "rimraf ./dist && tsc",
@@ -67,11 +67,11 @@
     "@types/cors": "^2.8.17",
     "@types/jest": "^29.5.13",
     "@types/json5": "^2.2.0",
-    "@types/koa__cors": "^5.0.0",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-compress": "^4.0.6",
     "@types/koa-morgan": "^1.0.8",
     "@types/koa-router": "^7.4.8",
+    "@types/koa__cors": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.5.5",
     "@types/supertest": "^6.0.2",
@@ -101,3 +101,4 @@
     "@/middlewares": "dist/middlewares"
   }
 }
+
